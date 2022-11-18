@@ -2,7 +2,8 @@ const [n, ...arr] = require("fs")
   .readFileSync("/dev/stdin")
   .toString()
   .trim()
-  .split(/\s/);
+  .split(/\s/)
+  .map(Number);
 
 //그냥 오름차순 정렬?
 const solution = (k, arr2) => {
@@ -11,10 +12,10 @@ const solution = (k, arr2) => {
 
   for (let i = 0; i < k; i++) {
     for (let j = 0; j <= i; j++) {
-      answer += Number(arr2[j]);
+      answer += arr2[j];
     }
   }
   return answer;
 };
 
-console.log(solution(Number(n), arr));
+console.log(solution(n, arr));
