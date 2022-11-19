@@ -1,25 +1,21 @@
 import sys
 import heapq
 input = sys.stdin.readline
-
 n = int(input())
-time = []
-for _ in range(n):
-    time.append(list(map(int, input().split())))
+arr = []
+for i in range(n):
+    a, b = map(int,input().split())
+    arr.append([a,b])
 
-# 시작시간을 기준으로 소팅
-time = sorted(time, key=lambda x:x[0])
+arr = sorted(arr, key=lambda x:x[0])
 
-q = []
-first= time.pop(0)
-heapq.heappush(q, first[1])
+room = []
+heapq.heappush(room,arr[0][1])
+for i in range(1,n):
+    if room[0] > arr[i][0]:
+        heapq.heappush(room,arr[i][1])
+    else : # 현재 회의실에서 바통터치 가능
+        heapq.heappop(room)
+        heapq.heappush(room,arr[i][1])
 
-for i in time:
-    #print(i)
-    if q[0] <= i[0]:
-        heapq.heappop(q)
-        heapq.heappush(q, i[1])
-    else:
-        heapq.heappush(q, i[1])
-
-print(len(q))
+print(len(room))
