@@ -1,31 +1,35 @@
-# 걷는경우 : 1칸씩 이동
-# 순간이동 : 두배씩 이동
-# n = 수빈이 위치     m = 동생 위치
-# n이 m을 찾는 가장 빠른 시간
-
+import sys
 from collections import deque
 
-[n,m] = list(map(int,input().split()))
-cases = [-1,1]
-# 매 이동마다 걷기 / 순간이동 두개의 선택지가 존재한다 BFS로 각 경우를 체크
-answer = []
-def BFS (startNode) :
-    queue = deque()
-    queue.append([startNode,0]) # 0초에서 출발
-    visited[startNode] = True
-    while (queue):
-        [currNode,time] = queue.popleft()
-        if (currNode == m):
-            return time
-        movedNode = currNode * 2 # 곱하기2 먼저함.
-        if (movedNode <= 100000 and movedNode >= 0 and visited[movedNode] ==False ):  # 아직 방문안한 지점이고 0보다크면
-            queue.appendleft([movedNode,time])
-            visited[movedNode] = True
-        for i in range(2):
-            movedNode = currNode + cases[i]
-            if (movedNode <= 100000 and movedNode >= 0 and visited[movedNode] ==False):
-                queue.append([movedNode,time+1])
-                visited[movedNode] = True
-visited = [False for _ in range(100001)]
-print(BFS(n))
 
+# 0 - 1 bfs 탐색
+
+def bfs():
+    graph = [-1] * 100001
+    graph[n] = 0
+    queue = deque([n])
+
+    while queue:
+        target = queue.popleft()
+
+        # 동생의 위치에 도달했다면 리턴
+        if target == k:
+            return graph[target]
+
+        # 반복문을 통해 3가지 이동의 경우를 확인
+        for i in (target + 1, target - 1, target * 2):
+
+            # 이동하는 곳이 범위 내에 있고 이동하지 않았다면 이동
+            if 0 <= i <= 100000 and graph[i] == -1:
+                # 순간이동이라면
+                if i == target * 2:
+                    graph[i] = graph[target] # 0초 갱신
+                    queue.appendleft(i) # 순간이동이기에 먼저 탐색
+
+                else:
+                    graph[i] = graph[target] + 1
+                    queue.append(i)
+
+
+n, k = map(int, sys.stdin.readline().split())
+print(bfs())
