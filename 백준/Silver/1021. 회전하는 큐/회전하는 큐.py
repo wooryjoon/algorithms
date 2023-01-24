@@ -11,9 +11,9 @@ arrays = deque([i for i in range(1,n+1)])
 
 cnt = 0
 for x in locations :
-    length = len(arrays) 
+    mid = len(arrays) // 2 
     temp = arrays.index(x)
-    if temp < length - temp :
+    if temp <= mid :
         while(True):
             if arrays[0] == x:
                 arrays.popleft()
