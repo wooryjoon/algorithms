@@ -45,7 +45,7 @@ for _ in range(M):
             print(min_heap[0][1])
     elif inputs[0] == 'solved':
             isSolved[int(inputs[1])] = True
-            while max_heap and isSolved[-max_heap[0][1]]:
+            while isSolved[-max_heap[0][1]]:
                 heappop(max_heap)
-            while min_heap and isSolved[min_heap[0][1]]:
+            while isSolved[min_heap[0][1]]:
                 heappop(min_heap)
