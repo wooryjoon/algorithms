@@ -1,57 +1,55 @@
-import sys
-import copy
-from collections import deque, defaultdict
+from collections import deque
 from itertools import permutations
-input = sys.stdin.readline
 
-board = deque() # x, y, 층
-visited = [False] * 5
-ans = 9999999
-dx = [0,0,1,-1,0,0]
-dy = [1,-1,0,0,0,0]
-dz = [0,0,0,0,-1,1] # 상 하
-for i in range(5):
-    layer = []
-    for j in range(5) :
-        layer.append(list(map(int,input().split())))
-    board.append(layer) 
+ans = 10**9
+dx, dy, dz = (1, -1, 0, 0, 0, 0), (0, 0, 1, -1, 0, 0), (0, 0, 0, 0, 1, -1)
+a = [[list(map(int, input().split())) for _ in range(5)] for _ in range(5)]
+b = [[[0]*5 for _ in range(5)] for _ in range(5)]
+
+def bfs():
+    global ans
+    q = deque()
+    q.append((0, 0, 0))
+    dist = [[[-1]*5 for _ in range(5)] for _ in range(5)]
+    dist[0][0][0] = 0
+    while q:
+        x, y, z = q.popleft()
+        if (x, y, z) == (4, 4 ,4):
+            ans = min(ans ,dist[x][y][z])
+            if ans == 12:
+                print(12)
+                exit(0)
+            return
+        for i in range(6):
+            nx, ny, nz = x+dx[i], y+dy[i], z+dz[i]
+            if nx < 0 or nx >= 5 or ny < 0 or ny >= 5 or nz < 0 or nz >= 5:
+                continue
+            if b[nx][ny][nz] and dist[nx][ny][nz] == -1:
+                q.append((nx, ny, nz))
+                dist[nx][ny][nz] = dist[x][y][z]+1
+
 def rotate(k):
     temp = [[0]*5 for _ in range(5)]
     for i in range(5):
         for j in range(5):
-            temp[j][4-i] = newMap[k][i][j]
-    return temp
-def BFS () :
-    global ans
-    visited = [[[-1 for _ in range(5)] for _ in range(5)] for _ in range(5)]
-    queue = deque()
-    queue.append([0,0,0])
-    visited[0][0][0] = 0 # 방문 처리
-    while queue :
-        z,x,y = queue.popleft()
-        if z == 4 and x == 4 and y == 4:
-            ans = min(ans,visited[z][x][y])
-        for i in range(6): # 동 서 남 북 상 하 6번
-            nz,nx,ny = z+dz[i],x+dx[i],y+dy[i]
-            if 0<=nz<5 and 0<=nx<5 and 0<=ny<5:
-                if visited[nz][nx][ny] == -1 and newMap[nz][nx][ny] == 1:
-                    visited[nz][nx][ny] = visited[z][x][y] + 1
-                    queue.append([nz,nx,ny])
-def DFS (newMap,depth) :
-    if depth == 5:
-        if newMap[4][4][4] :
-            BFS()
+            temp[j][4-i] = b[k][i][j]
+    b[k] = temp
+
+def maze(cnt):
+    if cnt == 5:
+        if b[4][4][4]:
+            bfs()
         return
-    for i in range(4) :
-        if newMap[0][0][0] == 1 :
-            DFS(newMap,depth+1)
-        newMap[depth] = rotate(depth)
+    for i in range(4):
+        if b[0][0][0]:
+            maze(cnt+1)
+        rotate(cnt)
 
-for d in permutations([0,1,2,3,4]):
-    # 0,1,2,3,4를 순열로 만든 배열. ex ) 0,1,2,4,3 0,1,3,2,4
-    newMap = []
-    for x in d :
-        newMap.append(board[x])
-    DFS(newMap,0)
+def solve():
+    for d in permutations([0, 1, 2, 3, 4]):
+        for i in range(5):
+            b[d[i]] = a[i]
+        maze(0)
 
-print(ans if ans != 9999999 else -1)
+solve()
+print(ans if ans != 10**9 else -1)
