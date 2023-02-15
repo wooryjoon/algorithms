@@ -13,6 +13,6 @@ STR = input().rstrip()
 s1 = set()
 for i in range(0,len(STR)):
     for j in range(i,len(STR)):
-        temp = ''.join(STR[j-i:j+1])
+        temp = STR[i:j+1]
         s1.add(temp)
 print(len(s1))
