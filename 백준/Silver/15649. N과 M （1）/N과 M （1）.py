@@ -1,26 +1,46 @@
-# 수열 : 순서가 중요.  -> 1,3,2 와 1,2,3은 다른 것.-> 각 재귀에서 체크한 visited를 false로 바꿔준다
+import sys
+input = sys.stdin.readline
 
-[N,M] = list(map(int,input().split()))
-numArray = [] # 1,2,3
-visited = [0]
+# v,e = list(map(int,input().split()))
+# board = [list(map(int,input().split())) for _ in range(e)]
+# parent = [0]*(v+1)
+# result = 0
 
-for i in range(1,N+1):
-    numArray.append(i); # 1부터 N까지의 수를 담은 배열 생성
-    visited.append(False) # 1~N까지의 방문 배열 생성
+# for i in range(1,len(parent)):
+#     parent[i] = i
+# board.sort(key=lambda x:x[2])
+# def find_parent(a) :
+#     if parent[a] != a :
+#         parent[a] = find_parent(parent[a])
+#     return parent[a]
+# def union_parent(a,b):
+#     a = find_parent(a)
+#     b = find_parent(b)
+#     if a < b :
+#         parent[b] = a
+#     else:
+#         parent[a] = b
 
-def DFS(perm,visit,depth):
-    # 종료조건
-    if (depth == M):
-        print(' '.join(map(str,perm)))
+# for edge in board :
+#     [a,b,cost] = edge
+#     if find_parent(a) != find_parent(b) :
+#         union_parent(a,b)
+#         result += cost
+# print(result)
+
+n,m = list(map(int,input().split())) # 1부터n까지 수중에 중복없이 1개 고른 수열
+#permutation
+visited = [0]*(n+1)
+def DFS (depth,ans) :
+    if depth == m :
+        print(' '.join(ans))
         return
-    #수행연산
-    for i in numArray:
-        if(visit[i] == False):
-            perm.append(i)
-            visit[i] = True
-            DFS(perm,visit,depth+1)
-            visit[i] = False
-            perm.pop()
+    for i in range(1,n+1):
+        if visited[i] == 0 : # 아직 방문 안함
+            ans.append(str(i))
+            visited[i] = 1
+            DFS(depth+1,ans)
+            ans.pop()
+            visited[i] = 0
 
-
-DFS([],visited,0)
+DFS(0,[])
