@@ -1,0 +1,9 @@
+-- 코드를 입력하세요
+# 입양보낸 동물중에.
+# 아이디 이름
+# 2마리까지
+# 보호기간 순으로
+SELECT B.ANIMAL_ID, B.NAME
+FROM ANIMAL_INS A JOIN ANIMAL_OUTS B ON A.ANIMAL_ID = B.ANIMAL_ID
+ORDER BY B.DATETIME - A.DATETIME DESC
+LIMIT 2
