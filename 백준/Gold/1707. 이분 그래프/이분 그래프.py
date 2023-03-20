@@ -1,38 +1,43 @@
-from collections import deque
 import sys
-input = sys.stdin.readline
 
-def BFS (currNode,visited,board) : # 맨첨에 1넣기
+input = sys.stdin.readline
+from collections import deque
+
+# 이분그래프 판별법 : 인접한 애들을 자기와 다른 색으로 채워나간다.
+def BFS (graph,startNode,nodeColor) :
+    nodeColor[startNode] = 1
     queue = deque()
-    visited[currNode] = 1
-    queue.append([currNode,1])
-    while (len(queue)):
-        [node,value] = queue.popleft()
-        for e in board[node]:
-            if visited[e] == value : return False 
-            if  visited[e] == 0 :
-                visited[e] = -value
-                queue.append([e,-value])
+    queue.append((startNode,1))
+    
+    while queue : 
+        currNode,value = queue.popleft()
+        for x in graph[currNode] :
+            if nodeColor[x] == value : return False
+            if nodeColor[x] == 0 :
+                nodeColor[x] = -value
+                queue.append((x,-value))
     return True
 
-T =int(input()) # 테케 갯수
-ans = []
-for _ in range(T):
-    [n,m] =list(map(int,input().split()))  #노드의 개수, 간선의 개수
-    arr = [list(map(int,input().split())) for _ in range(m)]
-    board = [[] for _ in range(n+1)]  
-    visited = [0] * (n+1)
-    for e in arr: # board 작성
-        [start,to] = e
-        board[start].append(to)
-        board[to].append(start)
-    flag = True
-    for i in range(1,n+1):
-        if visited[i] == 0:
-            flag = BFS(i,visited,board)
-            if flag == False: break
-    if flag == True :ans.append('YES')
-    else: ans.append('NO')
+def sol () :
+    ans = []
+    K = int(input())
+    for _ in range(K) :
+        V,E = list(map(int,input().split())) # 정점 개수, 간선 개수
+        graph = [[] for _ in range(V+1)] # 노드별 인접노드 배열 만들기
+        nodeColor = [0] * (V+1)
+        flag = True
+        for _ in range(E) :
+            u,v = list(map(int,input().split()))
+            graph[u].append(v)
+            graph[v].append(u)
+        for i in range(1,V+1):
+            if nodeColor[i] == 0 :
+                flag = BFS(graph,i,nodeColor)
+            if not flag : break
+        if flag == True : ans.append('YES')
+        else : ans.append('NO')
+    return ans
 
-for e in ans:
-    print(e)
+print('\n'.join(sol()))
+
+
