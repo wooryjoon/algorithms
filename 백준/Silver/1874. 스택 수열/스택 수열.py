@@ -1,32 +1,37 @@
 import sys
-from collections import deque
+
 input = sys.stdin.readline
+from collections import deque
+
+# 문제 정리
+    # 스택에 푸쉬하는 순서는 무조건 오름차순 순서대로 간다.   
+# 아이디어
+
+# 변수 사용 계획
+
+# 시간 복잡도
 
 n = int(input())
-sortedArr = deque([i for i in range(1,n+1)])
-inputArr = []
-generater = []
-stack = []
-cur = 1
-flag = False
-for _ in range(n):
-    x = int(input()) # value 4,3,6,8,7,5,2,1
-    # push 결정
-    while (cur <= x):
-        cur += 1
-        stack.append(sortedArr.popleft())
-        generater.append('+')
-    # pop 결정
-    if stack[-1] != x : # 스택의 top이 x가 아니라면
-        flag = True
+ans = []
+arr = [int(input()) for _ in range(n)]
+currNum = 1 # push할때 들어갈 수
+currTop = 0
+stack = deque()
+stack.append(0)
+flag = True
+for currInput in arr :
+    while currNum <= currInput:
+        stack.append(currNum)
+        ans.append('+')
+        currNum += 1;
+    if stack[-1] > currInput : 
+        print('NO')
+        flag = False
         break
-    else :
+    else : 
         stack.pop()
-        generater.append('-')
-
-if flag : 
-    print('NO')
-else : print('\n'.join(generater))
+        ans.append('-')
     
-        
-        
+
+if flag :
+    print('\n'.join(ans))
