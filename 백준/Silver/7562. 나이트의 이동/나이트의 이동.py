@@ -1,45 +1,38 @@
+import sys
+import copy
+input = sys.stdin.readline
 from collections import deque
+from itertools import permutations
 
+# 나이트는 현재 위치에서 최대 8개의 위치로 이동 가능
+# dx,dy로 케이스 분류해서 기록
+# 
 
-# T = 1
-# size = [4]
-# curr = [[3,2]]
-# location = [[0,2]]
-dx = [-1, -2, -2, -1, 1, 2, 2, 1]
-dy = [2, 1, -1, -2, -2, -1, 1, 2]
+def sol () :
+    T = int(input())
+    dx = (-1,-2,-2,-1,1,2,2,1)
+    dy = (-2,-1,1,2,2,1,-1,-2)
+    ans = []
+    def BFS(start,board,end):
+        x,y = start
+        q = deque()
+        board[x][y] = 1
+        q.append((x,y,0))
+        while q :
+            x,y,count = q.popleft()
+            if end == (x,y):
+                return count
+            for i in range(8):
+                nx,ny = x+dx[i],y+dy[i]
+                if 0<=nx<I and 0<=ny<I and board[nx][ny] == 0 :
+                    board[nx][ny] = 1
+                    q.append((nx,ny,count+1))
 
-
-# BFS 로 칸마다 count 기록
-def BFS (cx,cy,tx,ty) :
-    queue = deque()
-    board[cx][cy] = 1
-    queue.append([cx,cy,1])
-    while (len(queue)):
-        [x,y,count] = queue.popleft()
-        if (x == tx and y == ty) : 
-            print(count-1)
-            return
-        for i in range(8):
-            nx = x + dx[i]
-            ny = y + dy[i]
-            if (
-                nx < 0 or ny < 0 or nx >= L or ny >= L
-            ) : continue
-            if (board[nx][ny] == 0):
-                board[nx][ny] = count + 1
-                queue.append([nx,ny,count+1])
-        
-T = int(input())
-
-for i in range(T) :
-    L = int(input())
-    board = [[0 for _ in range(L)] for _ in range(L)]
-    cx,cy  = map(int,input().split())
-    tx,ty =  map(int,input().split())
-    # L = size[i]
-    # board = [[0 for j in range(L)] for k in range(L)]
-    # currNode = curr[i]
-    # target = location[i]
-    BFS(cx,cy,tx,ty)
-
-
+    for i in range(T):
+        I = int(input())
+        start = tuple(map(int,input().split()))
+        end = tuple(map(int,input().split()))
+        board = [[0]*I for _ in range(I)]
+        ans.append(BFS(start,board,end))
+    print('\n'.join(map(str,ans)))
+sol()
