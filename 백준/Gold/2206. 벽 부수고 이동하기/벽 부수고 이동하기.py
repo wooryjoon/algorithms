@@ -1,40 +1,43 @@
+import sys
+import copy
+input = sys.stdin.readline
 from collections import deque
-# 입력받고
-N,M = map(int,input().split())
-board = []
-for _ in range(N):
-    board.append(list(map(int,input()))) # board 생성
+from itertools import permutations
+from sys import setrecursionlimit
+setrecursionlimit(10**8)
+
+# visited의 각 칸을 벽을 부순경우의 visit과 안 부순 경우의 visit
+# 칸 개수는 시작경로부터 센다.
+# 0,0에서 출발, n-1,m-1에 도달
+n,m = list(map(int,input().split()))
+board = [list(input().strip()) for _ in range(n)]
+visited = [[[0] * 2 for _ in range(m)] for _ in range(n)]
+dx = (0,0,1,-1)
+dy = (1,-1,0,0)
+
 def BFS () :
-    queue = deque()
-    queue.append([0,0,0]) # x y 찬스 사용여부
-    visited[0][0][0] = 1
-    while (len(queue)):
-        [x,y,crashed] = queue.popleft()
-        if (x == N-1 and y == M-1):
-            return(visited[x][y][crashed])
+    q = deque()
+    visited[0][0][0] = 1 # 찬스 안 쓴 상태로 방문처리
+    q.append((0,0,1,0))
+    while q :
+        x,y,cnt,chance = q.popleft()
+        if x == n-1 and y == m-1 :
+            return cnt
         for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
-            if (nx < 0 or ny < 0 or nx >= N or ny >= M):
-                continue # 범위를 벗어나는 경우 
-            if (board[nx][ny] == 0 and visited[nx][ny][crashed] == 0): # 벽이아니고,방문안한경우
-                visited[nx][ny][crashed] = visited[x][y][crashed] + 1
-                queue.append([nx,ny,crashed])
-            elif (board[nx][ny] == 1 and visited[nx][ny][crashed] == 0): # 다음이 벽이고, 방문 안한경우
-                if (crashed == 0): # 찬스 사용 안한경우
-                    visited[nx][ny][1] = visited[x][y][crashed] + 1
-                    queue.append([nx,ny,1])
-                elif (crashed == 1): # 찬스 사용한 경우 
-                    continue  
-    return(-1)
-
-#솔루션함수 만들고
-def solution (N,M,board) :
-    global visited,dx,dy
-    dx = [0,0,1,-1]
-    dy = [1,-1,0,0]
-    visited = [[[0]*2 for _ in range(M)] for _ in range(N)] # 삼차원배열의 첫항은 count, 두번째항은 
-    #그 루트 상에서 crashed 찬스 썼는지 여부
-    return BFS()
-
-print(solution(N,M,board))
+            nx,ny = x+dx[i],y+dy[i]
+            if 0<=nx<n and 0<=ny<m: # 범위 조건
+                if chance == 1 : # 찬스 쓴 경우
+                    if board[nx][ny] == '1': # 벽 만나면 못 뚫음
+                        continue
+                    elif board[nx][ny] == '0' and visited[nx][ny][chance] == 0 :
+                        visited[nx][ny][chance] = 1
+                        q.append((nx,ny,cnt+1,chance))
+                elif chance == 0 : # 찬스 안 쓴 경우
+                    if board[nx][ny] == '1': # 벽 만남
+                        visited[nx][ny][chance+1] = 1
+                        q.append((nx,ny,cnt+1,chance+1))
+                    elif board[nx][ny] == '0' and visited[nx][ny][chance] == 0 : # 벽 안만남
+                        visited[nx][ny][chance] = 1
+                        q.append((nx,ny,cnt+1,chance))
+    return -1
+print(BFS())
