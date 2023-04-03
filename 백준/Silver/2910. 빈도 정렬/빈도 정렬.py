@@ -20,18 +20,13 @@ temp = []
 ans = []
 for i in range(N):
     e = arr[i]
-    if hashMap.get(e):
+    if e in hashMap:
         hashMap[e][0] += 1
     else :
         hashMap[e] = [1,i]
-for key in hashMap :
-    freq,order = hashMap[key]
-    temp.append([freq,order,key])
-temp.sort(key=lambda x:(-x[0],x[1]))
-
-for e in temp :
-    freq,order,key = e
-    for i in range(freq):
-        ans.append(key)
-print(' '.join(map(str,ans)))
+temp = [[i,j] for i,j in hashMap.items()]
+temp.sort(key=lambda x:(-x[1][0],x[1][1])) # 빈도수, 우선순위 정렬
+for i,j in temp :
+    ans += [i] * j[0]
+print(*ans)
 
