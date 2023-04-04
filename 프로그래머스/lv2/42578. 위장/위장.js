@@ -10,6 +10,5 @@ function solution(clothes) {
     answer = Object.values(hash).reduce((acc,cur) => {
          return acc * (cur+1);
     },1 );
-    console.log(hash);
     return answer -1;
 }
