@@ -1,13 +1,7 @@
 import sys
-import math
-import copy
+
 input = sys.stdin.readline
-from collections import deque 
-from itertools import combinations
-import heapq
-
 # 반복문으로 넣고, while문으로 빼기
-
 n = int(input())
 arr = list(map(int,input().split()))
 stack = []
