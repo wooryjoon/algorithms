@@ -6,6 +6,5 @@ def solution(d, budget):
         if budget >= x :
             budget -= x
             ans += 1
-        else : 
-            break
+        else : break
     return ans
