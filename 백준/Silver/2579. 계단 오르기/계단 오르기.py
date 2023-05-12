@@ -1,35 +1,30 @@
 import sys
-import copy
-from collections import deque
 input = sys.stdin.readline
+from collections import deque
 
-#[문제 정리]
-# 각 계단에 도달할때의 최대값을 dp테이블에 저장하여서 풀기.
-# [아이디어]
-# d[1] = t[1]
-# d[2] = d[1] + t[2]
-# d[3] = d[1] + t[3]
-# d[4] = 1,3 or 2 + t[4] = d[3] or d[2] + t[4]
-# d[n] = d[n-1] + t[n] or d[n-2] + t[n]
-# [시간복잡도]
+# 문제 정리
+    # 계단은 한칸 or 두칸 이동 가능
+    # 그러나, 연속해서 세 계단을 모두 밟으면 안됨.
+    # 마지막 도착 계단은 반드시 밟아야함
 
-# [변수 사용계획]
+# 아이디어
+    # i번째 계단에서 가는 경우 : i+1 or i+2
+    # 만약에 i-1에서 i로 온 경우에는 i+1로 갈 수 없다.
+    # d[i] = i번쨰 계단까지 밟은 값 합의 최대값
+    # d[i] = d[i-1] + s[i] or d[i-2] + s[i]
+#시간복잡도
 
-T = int(input()) # 층수
-s = [0]
+n = int(input()) # 계단 수
+s = [0] * 301
 
-for _ in range(T):
-    s.append(int(input()))
+for i in range(1,n+1) :
+    s[i] = (int(input()))
 
-def solution (T) :
-    if T == 1 : return s[1]
-    if T == 2: return s[1] + s[2]
-    if T == 3: return max(s[1]+s[3],s[3]+s[2])
-    d = [0] * (T+1)
+def solution(n,s) :
+    d = [0] * 301
     d[1] = s[1]
-    d[2] = s[1] + s[2]
-    d[3] = max(s[1]+s[3],s[3]+s[2])
-    for i in range(4,T+1):
-        d[i] = max(d[i-2] + s[i],d[i-3] + s[i-1] + s[i])
-    return d[T]
-print(solution(T))
+    d[2] = max(s[2],s[1]+s[2])
+    for i in range(3,n+1) :
+        d[i] = max(d[i-3]+s[i-1]+s[i],d[i-2]+s[i])
+    print(d[n])
+solution(n,s)
