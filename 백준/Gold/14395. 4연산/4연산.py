@@ -7,10 +7,10 @@ sys.setrecursionlimit(10**8)
 s,t = list(map(int,input().split()))
 def BFS():
     gen = ['*','+','-','/']
-    visited = set()
+    visited = defaultdict(int)
     q = deque()
     q.append([s,''])
-    visited.add(s)
+    visited[s] = 1
     while q :
         num,ans = q.popleft()
         if num > 10**9 : continue
@@ -18,21 +18,25 @@ def BFS():
             return ans
         for i in range(4):
             currGen = gen[i]
-            nextNum = num
             if currGen == '*':
-                nextNum *= num
+                if visited[num*num] == 1 : continue
+                if num*num > 10 ** 9: continue
+                visited[num*num] = 1
+                q.append([num*num,ans+currGen])
             if currGen == '+':
-                nextNum += num
+                if visited[num+num] == 1 : continue
+                visited[num + num] = 1
+                q.append([num+num,ans+currGen])
             if currGen == '-':
-                nextNum -= num
+                if visited[num-num] == 1 : continue
+                visited[num - num] = 1
+                q.append([num-num,ans+currGen])
             if currGen == '/' and num != 0:
-                nextNum = 1
-            if nextNum in visited : continue
-            visited.add(nextNum)
-            q.append([nextNum,ans+currGen])
+                if visited[num//num] == 1 : continue
+                visited[num // num] = 1
+                q.append([num//num,ans+currGen])
     return -1
 
-if s == t :
-    print(0)
-    exit()
-print(BFS())
+if s == t : print(0)
+else:
+    print(BFS())
