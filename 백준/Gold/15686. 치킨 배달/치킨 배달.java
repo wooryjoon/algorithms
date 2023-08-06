@@ -19,7 +19,7 @@ public class Main {
 	public static int[] dx;
 	public static int[] dy;
 	//  BOJ 15686 치킨거리
-	// 조합으로 치킨 위치 잡고, 잡은 상태에서 BFS로 치킨 거리 구해서 sum 도출
+	// 조합으로 치킨 위치 잡고, 그 Case에서 치킨 거리 구하기
 	public static void main(String[] args) throws IOException {
 		// Input Parsing
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
