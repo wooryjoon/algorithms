@@ -93,7 +93,7 @@ public class Main {
             // 상어를 발견하면?
             if (sharkBoard[i][currY]) {
                 ans += board[i][currY][2];
-                board[i][currY] = new int[3];
+                board[i][currY] = null;
                 sharkBoard[i][currY] = false;
                 break;
             }
@@ -112,7 +112,7 @@ public class Main {
                     int z = board[i][j][2];
                     int [] temp = {i,j,s,d,z};
                     sharkStack.push(temp);
-                    board[i][j] = new int[3];
+                    board[i][j] = null;
                 }
             }
         }
