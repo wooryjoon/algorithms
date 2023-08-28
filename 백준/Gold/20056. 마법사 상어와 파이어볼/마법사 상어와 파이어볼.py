@@ -58,10 +58,12 @@ def spreadFireBall(fireball):
                     nd = [0,2,4,6]
                 else :
                     nd = [1,3,5,7]
+                newS = speed // f_lengths;
+                newW = weight // 5;
+                if (newW == 0):continue
                 for dirs in nd:
                     # 유효한 fireball만 남기기
-                    if weight // 5 > 0 :
-                        fireball.append([i, j, weight // 5, speed//cnt, dirs])
+                    fireball.append([i, j, newW, newS, dirs])
             # fireball이 1개 -> 질량 조건 맞다면 그대로 담기
             if f_lengths == 1 :
                 x,y,w,s,d = board[i][j].pop()
