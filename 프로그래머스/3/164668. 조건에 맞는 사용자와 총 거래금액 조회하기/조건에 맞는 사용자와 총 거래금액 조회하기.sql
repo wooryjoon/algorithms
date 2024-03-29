@@ -1,0 +1,38 @@
+# # # 회원별 중고거래 총금액 구하기
+
+# SELECT A.USER_ID,NICKNAME,TOTAL_SALES
+# FROM
+#     USED_GOODS_USER A
+#     JOIN
+#         (SELECT WRITER_ID,SUM(PRICE) AS TOTAL_SALES
+#     FROM
+#         USED_GOODS_BOARD
+#     WHERE STATUS = "DONE"
+#     GROUP BY
+#         WRITER_ID
+#     HAVING 
+#         TOTAL_SALES >= 700000
+#         ) B
+#     ON A.USER_ID = B.WRITER_ID
+
+# ORDER BY
+#     TOTAL_SALES
+
+# 중고 거래 금액이 70만원 이상인 사람 아이디 조회
+SELECT
+    USER.USER_ID, USER.NICKNAME, BOARD.TOTAL AS TOTAL_SALES
+FROM
+    USED_GOODS_USER AS USER
+    JOIN
+        (SELECT  
+        WRITER_ID,SUM(PRICE) AS TOTAL
+    FROM
+        USED_GOODS_BOARD
+    WHERE STATUS = 'DONE'
+         GROUP BY
+        WRITER_ID
+    HAVING
+        SUM(PRICE) >= 700000) AS BOARD
+    ON 
+    BOARD.WRITER_ID = USER.USER_ID
+ORDER BY BOARD.TOTAL
